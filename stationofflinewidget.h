@@ -2,6 +2,7 @@
 #define STATIONOFFLINEWIDGET_H
 
 #include <QWidget>
+class QSqlTableModel;
 
 namespace Ui {
 class StationOfflineWidget;
@@ -29,6 +30,7 @@ private slots:
 private:
     Ui::StationOfflineWidget *ui;
     QString m_card_type;
+    QSqlTableModel* tableModel;
 };
 
 #endif // STATIONOFFLINEWIDGET_H

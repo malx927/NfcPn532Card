@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QDate>
+class QSqlTableModel;
 
 namespace Ui {
 class StationManageWidget;
@@ -29,6 +30,7 @@ private slots:
 private:
     Ui::StationManageWidget *ui;
     QString m_card_type;
+    QSqlTableModel* tableModel;
 };
 
 #endif // STATIONMANAGEWIDGET_H

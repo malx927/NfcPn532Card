@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     createAction();
     createToolbar();
+    createSqliteDb();
     showPanel();
 
     const auto infos = QSerialPortInfo::availablePorts();
@@ -46,9 +47,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     pn532Api = new NfcPn532Api(this);
 
-    createSqliteDb();
-//    createModel();
-//    createView();
+
     setButtionState(false);
 }
 

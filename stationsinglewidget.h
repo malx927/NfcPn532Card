@@ -2,6 +2,7 @@
 #define STATIONSINGLEWIDGET_H
 
 #include <QWidget>
+class QSqlTableModel;
 
 namespace Ui {
 class StationSingleWidget;
@@ -27,6 +28,7 @@ private slots:
 private:
     Ui::StationSingleWidget *ui;
     QString m_card_type;
+    QSqlTableModel* tableModel;
 };
 
 #endif // STATIONSINGLEWIDGET_H

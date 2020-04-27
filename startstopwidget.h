@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QDate>
+class QSqlTableModel;
 
 namespace Ui {
 class StartStopWidget;
@@ -18,6 +19,9 @@ public:
 
 signals:
     void sig_start_stop_write(QString cType, QDate date);
+private:
+    void createModel();
+    void createView();
 
 public slots:
     void setBtnEnable(bool flag);
@@ -28,6 +32,7 @@ private slots:
 private:
     Ui::StartStopWidget *ui;
     QString m_card_type;
+    QSqlTableModel* tableModel;
 };
 
 #endif // STARTSTOPWIDGET_H

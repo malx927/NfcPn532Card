@@ -2,6 +2,7 @@
 #define CORPOFFLINEWIDGET_H
 
 #include <QWidget>
+class QSqlTableModel;
 
 namespace Ui {
 class CorpOfflineWidget;
@@ -29,6 +30,7 @@ private slots:
 private:
     Ui::CorpOfflineWidget *ui;
     QString m_card_type;
+    QSqlTableModel* tableModel;
 };
 
 #endif // CORPOFFLINEWIDGET_H

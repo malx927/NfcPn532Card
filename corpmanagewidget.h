@@ -2,6 +2,7 @@
 #define CORPMANAGEWIDGET_H
 
 #include <QWidget>
+class QSqlTableModel;
 
 namespace Ui {
 class CorpManageWidget;
@@ -18,6 +19,7 @@ public:
 private:
     Ui::CorpManageWidget *ui;
     QString m_card_type;
+    QSqlTableModel* tableModel;
 };
 
 #endif // CORPMANAGEWIDGET_H

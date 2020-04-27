@@ -2,7 +2,7 @@
 #define CORPNETWORKWIDGET_H
 
 #include <QWidget>
-
+class QSqlTableModel;
 namespace Ui {
 class CorpNetworkWidget;
 }
@@ -27,6 +27,7 @@ private slots:
 private:
     Ui::CorpNetworkWidget *ui;
     QString m_card_type;
+    QSqlTableModel* tableModel;
 };
 
 #endif // CORPNETWORKWIDGET_H
