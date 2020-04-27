@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/">
+        <file>image/3_bianji.png</file>
+        <file>image/4_chakan.png</file>
+        <file>image/6_chehui.png</file>
+        <file>image/8_tongguo.png</file>
+        <file>image/9_tuihui.png</file>
+        <file>image/11_baocun.png</file>
+        <file>image/15_jiefeng.png</file>
+        <file>image/44_qingchu.png</file>
+        <file>image/58_kaquan.png</file>
+        <file>image/64_zhifuzhanghu.png</file>
+        <file>image/67_huiyuanbaobiao.png</file>
+        <file>image/corp_manage.png</file>
+        <file>image/corp_network.png</file>
+        <file>image/corp_offline.png</file>
+        <file>image/single_device.png</file>
+        <file>image/start_stop.png</file>
+        <file>image/station_manage.png</file>
+        <file>image/station_network.png</file>
+        <file>image/station_offline.png</file>
+    </qresource>
+</RCC>
