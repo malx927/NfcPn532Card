@@ -51,7 +51,7 @@ void StartStopWidget::createView()
 
     ui->startTableView->setModel( tableModel );
     ui->startTableView->hideColumn(0);
-//    ui->startTableView->horizontalHeader()->setSectionResizeMode(3,QHeaderView::Stretch);
+    ui->startTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 //    ui->startTableView->resizeColumnToContents(1);
 //    ui->startTableView->resizeColumnToContents(2);
 //    ui->startTableView->resizeColumnToContents(4);
