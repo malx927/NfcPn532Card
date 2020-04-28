@@ -38,6 +38,7 @@ public:
     int nfc_CreateCard_SelfUsed(char *DeviceSN);//单桩-绑定卡
     int nfc_ClearCard_offline();
     float nfc_ReadCard_offline();
+    int nfc_RechargeCard_offline(uint8_t *pStationID, char* pOutRfidNumbers, int money);
 
     QByteArray readData();
 

@@ -51,6 +51,7 @@ public slots:
     void slot_station_single_write(QString cType, QString deviceSN);
     void slot_card_money_clear(QString cType);
     void slot_card_read_money(QString cType);
+    void slot_card_recharge_money(QString cType, int money);
 
 signals:
 

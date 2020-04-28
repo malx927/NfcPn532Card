@@ -86,6 +86,8 @@ void StationOfflineWidget::setBtnEnable(bool flag)
 {
     ui->stOfflineButton->setEnabled(flag);
     ui->clearMoneyButton->setEnabled(flag);
+    ui->readButton->setEnabled(flag);
+    ui->rechargeButton->setEnabled(flag);
 }
 
 void StationOfflineWidget::on_stOfflineButton_clicked()
@@ -111,10 +113,23 @@ void StationOfflineWidget::on_stOfflineButton_clicked()
 
 void StationOfflineWidget::on_clearMoneyButton_clicked()
 {
-
+    emit sig_corp_offline_clear(m_card_type);
 }
 
-void StationOfflineWidget::on_pushButton_2_clicked()
-{
 
+void StationOfflineWidget::on_rechargeButton_clicked()
+{
+    int money = ui->spinBoxMoney->value();
+    if(money == 0)
+    {
+        QMessageBox::warning(this, "提示:", "充值金额不能为空");
+        ui->spinBoxMoney->setFocus();
+        return;
+    }
+    emit sig_corp_offline_recharge(m_card_type, money);
+}
+
+void StationOfflineWidget::on_readButton_clicked()
+{
+    emit sig_corp_offline_read(m_card_type);
 }

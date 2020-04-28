@@ -177,6 +177,14 @@ void MainWindow::showPanel()
     connect(stOfflineWidget, &StationOfflineWidget::sig_station_offline_write, this, &MainWindow::slot_station_offline_write);
     connect(stSingleWidget, &StationSingleWidget::sig_station_single_write, this, &MainWindow::slot_station_single_write);
 
+    connect(offlineWidget, &CorpOfflineWidget::sig_corp_offline_read, this, &MainWindow::slot_card_read_money);
+    connect(offlineWidget, &CorpOfflineWidget::sig_corp_offline_clear, this, &MainWindow::slot_card_money_clear);
+    connect(offlineWidget, &CorpOfflineWidget::sig_corp_offline_recharge, this, &MainWindow::slot_card_recharge_money);
+
+    connect(stOfflineWidget, &StationOfflineWidget::sig_corp_offline_read, this, &MainWindow::slot_card_read_money);
+    connect(stOfflineWidget, &StationOfflineWidget::sig_corp_offline_clear, this, &MainWindow::slot_card_money_clear);
+    connect(stOfflineWidget, &StationOfflineWidget::sig_corp_offline_recharge, this, &MainWindow::slot_card_recharge_money);
+
 }
 
 void MainWindow::addWidget()
@@ -351,7 +359,7 @@ void MainWindow::slot_corp_offline_write(QString cType, int value)
 
         int ret = pn532Api->nfc_CreateCard_Offline(StationID, OutRfidNumbers, (uint32_t)money);
 
-        qDebug() << "公司离线卡:" <<QString(OutRfidNumbers);
+        qDebug() << "公司离线卡:" <<QString(OutRfidNumbers) <<"char:" << OutRfidNumbers;
 //        auto cur_time = QDate::currentDate();
 //        insertData(cType, QStringLiteral("公司离线卡"), cur_time, QString(OutRfidNumbers), QString(), money);
 
@@ -447,8 +455,11 @@ void MainWindow::slot_station_offline_write(QString cType, QString stationId, in
 
         bool ok;
         uint u_station_id = strStationID.toUInt(&ok);
+        qDebug() << "slot_station_offline_write::" << u_station_id;
         QByteArray arrStationID = intToByte4(u_station_id);
+
         strcpy((char*)StationID, arrStationID.data());
+        qDebug() << "slot_station_offline_write::" << u_station_id << arrStationID << StationID;
 
         int money = nMoney * 100;
 
@@ -507,14 +518,51 @@ void MainWindow::slot_card_read_money(QString cType)
 {
     if(cType == "54" || cType == "51")
     {
-        int ret = pn532Api->nfc_ReadCard_offline();
+        float ret = pn532Api->nfc_ReadCard_offline();
         if(ret >= 0)
         {
-            QMessageBox::information(this, "卡金额:", QString("%1元").arg(ret));
+
+            QMessageBox::information(this, "读取金额:", QString("%1元").arg(ret));
         }
         else
         {
-            QMessageBox::critical(this, "卡金额清零:", "卡清零失败!");
+            QMessageBox::critical(this, "读取金额:", "读取金额失败!");
+        }
+    }
+}
+
+void MainWindow::slot_card_recharge_money(QString cType, int money)
+{
+    if(cType == "54" || cType == "51")
+    {
+        uint8_t StationID[4] = {0};
+        char OutRfidNumbers[64];
+        memset(OutRfidNumbers, 0, 64);
+
+        int ret = pn532Api->nfc_RechargeCard_offline(StationID, OutRfidNumbers, money);
+        if(ret >= 0)
+        {
+            auto cur_time = QDate::currentDate();
+
+            QString card_type = "";
+            if(cType == "51")
+            {
+                card_type = "公司离线卡";
+            }
+            else
+            {
+                card_type = "场站离线卡";
+            }
+
+//            int32_t intStation = (StationID[0] << 24&0xff000000) | (StationID[1] << 16&0x00ff0000) | (StationID[2] << 8&0x0000ff00) | (StationID[3]&0x000000ff);
+            int32_t intStation = ((uint8_t)(StationID[0])>>0) |((uint8_t)(StationID[1])<<8) | ((uint8_t)(StationID[2])<<16) | ((uint8_t)(StationID[3])<<24) ;
+            qDebug() << "intStation" << intStation;
+            insertData(cType, card_type, cur_time, QString(OutRfidNumbers), QString::number(intStation), money);
+            QMessageBox::information(this, "充值提示:", "充值成功");
+        }
+        else
+        {
+            QMessageBox::critical(this, "充值提示:", "充值失败!");
         }
     }
 }

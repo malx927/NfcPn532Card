@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'stationofflinewidget.ui'
 **
-** Created by: Qt User Interface Compiler version 5.12.8
+** Created by: Qt User Interface Compiler version 5.12.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -35,7 +35,9 @@ public:
     QSpinBox *spinBoxMoney;
     QLabel *label_4;
     QPushButton *stOfflineButton;
+    QPushButton *rechargeButton;
     QPushButton *clearMoneyButton;
+    QPushButton *readButton;
     QSpacerItem *horizontalSpacer;
     QTableView *stOfflineTableView;
     QHBoxLayout *horizontalLayout_2;
@@ -48,7 +50,7 @@ public:
     {
         if (StationOfflineWidget->objectName().isEmpty())
             StationOfflineWidget->setObjectName(QString::fromUtf8("StationOfflineWidget"));
-        StationOfflineWidget->resize(701, 447);
+        StationOfflineWidget->resize(890, 561);
         verticalLayout = new QVBoxLayout(StationOfflineWidget);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         horizontalLayout = new QHBoxLayout();
@@ -61,6 +63,7 @@ public:
 
         lineEditStationID = new QLineEdit(StationOfflineWidget);
         lineEditStationID->setObjectName(QString::fromUtf8("lineEditStationID"));
+        lineEditStationID->setMinimumSize(QSize(150, 0));
         lineEditStationID->setMaximumSize(QSize(120, 16777215));
         lineEditStationID->setMaxLength(10);
 
@@ -89,11 +92,23 @@ public:
 
         horizontalLayout->addWidget(stOfflineButton);
 
+        rechargeButton = new QPushButton(StationOfflineWidget);
+        rechargeButton->setObjectName(QString::fromUtf8("rechargeButton"));
+        rechargeButton->setMinimumSize(QSize(100, 30));
+
+        horizontalLayout->addWidget(rechargeButton);
+
         clearMoneyButton = new QPushButton(StationOfflineWidget);
         clearMoneyButton->setObjectName(QString::fromUtf8("clearMoneyButton"));
         clearMoneyButton->setMinimumSize(QSize(100, 30));
 
         horizontalLayout->addWidget(clearMoneyButton);
+
+        readButton = new QPushButton(StationOfflineWidget);
+        readButton->setObjectName(QString::fromUtf8("readButton"));
+        readButton->setMinimumSize(QSize(100, 30));
+
+        horizontalLayout->addWidget(readButton);
 
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -148,7 +163,9 @@ public:
         label_3->setText(QApplication::translate("StationOfflineWidget", "\345\205\205\345\200\274\351\207\221\351\242\235:", nullptr));
         label_4->setText(QApplication::translate("StationOfflineWidget", "\345\205\203", nullptr));
         stOfflineButton->setText(QApplication::translate("StationOfflineWidget", "\345\206\231\347\253\231\345\234\272\347\246\273\347\272\277\345\215\241", nullptr));
+        rechargeButton->setText(QApplication::translate("StationOfflineWidget", "\345\215\241\345\205\205\345\200\274", nullptr));
         clearMoneyButton->setText(QApplication::translate("StationOfflineWidget", "\346\270\205\347\251\272\351\207\221\351\242\235", nullptr));
+        readButton->setText(QApplication::translate("StationOfflineWidget", "\350\257\273\345\217\226\351\207\221\351\242\235", nullptr));
         label_5->setText(QApplication::translate("StationOfflineWidget", "\351\207\221\351\242\235\345\220\210\350\256\241:", nullptr));
         label_money->setText(QString());
         label_6->setText(QApplication::translate("StationOfflineWidget", "\345\205\203", nullptr));

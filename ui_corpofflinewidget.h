@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'corpofflinewidget.ui'
 **
-** Created by: Qt User Interface Compiler version 5.12.8
+** Created by: Qt User Interface Compiler version 5.12.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -32,7 +32,9 @@ public:
     QSpinBox *spinBoxMoney;
     QLabel *label_4;
     QPushButton *offlineButton;
+    QPushButton *pushButton;
     QPushButton *clearMoneyButton;
+    QPushButton *readButton;
     QSpacerItem *horizontalSpacer;
     QTableView *offlineTableView;
     QHBoxLayout *horizontalLayout_2;
@@ -45,7 +47,7 @@ public:
     {
         if (CorpOfflineWidget->objectName().isEmpty())
             CorpOfflineWidget->setObjectName(QString::fromUtf8("CorpOfflineWidget"));
-        CorpOfflineWidget->resize(626, 448);
+        CorpOfflineWidget->resize(752, 492);
         verticalLayout = new QVBoxLayout(CorpOfflineWidget);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         horizontalLayout = new QHBoxLayout();
@@ -73,11 +75,23 @@ public:
 
         horizontalLayout->addWidget(offlineButton);
 
+        pushButton = new QPushButton(CorpOfflineWidget);
+        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+        pushButton->setMinimumSize(QSize(100, 30));
+
+        horizontalLayout->addWidget(pushButton);
+
         clearMoneyButton = new QPushButton(CorpOfflineWidget);
         clearMoneyButton->setObjectName(QString::fromUtf8("clearMoneyButton"));
         clearMoneyButton->setMinimumSize(QSize(100, 30));
 
         horizontalLayout->addWidget(clearMoneyButton);
+
+        readButton = new QPushButton(CorpOfflineWidget);
+        readButton->setObjectName(QString::fromUtf8("readButton"));
+        readButton->setBaseSize(QSize(100, 30));
+
+        horizontalLayout->addWidget(readButton);
 
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -130,7 +144,9 @@ public:
         label_3->setText(QApplication::translate("CorpOfflineWidget", "\345\205\205\345\200\274\351\207\221\351\242\235:", nullptr));
         label_4->setText(QApplication::translate("CorpOfflineWidget", "\345\205\203", nullptr));
         offlineButton->setText(QApplication::translate("CorpOfflineWidget", "\345\206\231\345\205\254\345\217\270\347\246\273\347\272\277\345\215\241", nullptr));
+        pushButton->setText(QApplication::translate("CorpOfflineWidget", "\345\215\241\345\205\205\345\200\274", nullptr));
         clearMoneyButton->setText(QApplication::translate("CorpOfflineWidget", "\346\270\205\347\251\272\351\207\221\351\242\235", nullptr));
+        readButton->setText(QApplication::translate("CorpOfflineWidget", "\350\257\273\345\217\226\351\207\221\351\242\235", nullptr));
         label->setText(QApplication::translate("CorpOfflineWidget", "\351\207\221\351\242\235\345\220\210\350\256\241:", nullptr));
         label_money->setText(QString());
         label_2->setText(QApplication::translate("CorpOfflineWidget", "\345\205\203", nullptr));

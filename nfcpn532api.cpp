@@ -591,7 +591,7 @@ int NfcPn532Api::nfc_CreateCard_Network(uint8_t *pStationID,char *pOutRfidNumber
     if(nfc_write16byte(3,DataBuffer))
         return -1;
 
-    snprintf(pOutRfidNumbers,16,"%02x%02x%02x%02x%02x%02x%02x%02x",g_PN532_NFC_UID[0],g_PN532_NFC_UID[1],g_PN532_NFC_UID[2],g_PN532_NFC_UID[3],pStationID[0],pStationID[1],pStationID[2],pStationID[3]);
+    snprintf(pOutRfidNumbers,17,"%02x%02x%02x%02x%02x%02x%02x%02x",g_PN532_NFC_UID[0],g_PN532_NFC_UID[1],g_PN532_NFC_UID[2],g_PN532_NFC_UID[3],pStationID[0],pStationID[1],pStationID[2],pStationID[3]);
     qDebug() << "Leave nfc_CreateCard_Network";
     return 0;
 }
@@ -673,7 +673,7 @@ int NfcPn532Api::nfc_CreateCard_Offline(uint8_t *pStationID,char *pOutRfidNumber
     if(nfc_write16byte(3,DataBuffer))
         return -1;
 
-    snprintf(pOutRfidNumbers,16,"%02x%02x%02x%02x%02x%02x%02x%02x",g_PN532_NFC_UID[0],g_PN532_NFC_UID[1],g_PN532_NFC_UID[2],g_PN532_NFC_UID[3],pStationID[0],pStationID[1],pStationID[2],pStationID[3]);
+    snprintf(pOutRfidNumbers,17,"%02x%02x%02x%02x%02x%02x%02x%02x",g_PN532_NFC_UID[0],g_PN532_NFC_UID[1],g_PN532_NFC_UID[2],g_PN532_NFC_UID[3],pStationID[0],pStationID[1],pStationID[2],pStationID[3]);
     qDebug() << "Leave nfc_CreateCard_Offline";
     return 0;
 }
@@ -757,6 +757,8 @@ int NfcPn532Api::nfc_ClearCard_offline()
     qDebug() << "Enter nfc_ClearCard_offline";
     uint8_t index=0;
     uint8_t DataBuffer[17];
+    uint8_t StationID[4];
+    uint32_t Money = 0;
 
     if(nfc_WakeUp())
     {
@@ -776,6 +778,7 @@ int NfcPn532Api::nfc_ClearCard_offline()
 
     //数据清零
     memset(DataBuffer,0,17);
+    memset(StationID,0,4);
 
     if(nfc_read16byte(1,DataBuffer))
     {
@@ -783,12 +786,26 @@ int NfcPn532Api::nfc_ClearCard_offline()
         return -1;
     }
 
+    StationID[0] = DataBuffer[12] - g_PN532_NFC_UID[0];
+    StationID[1] = DataBuffer[13] - g_PN532_NFC_UID[1];
+    StationID[2] = DataBuffer[14] - g_PN532_NFC_UID[2];
+    StationID[3] = DataBuffer[15] - g_PN532_NFC_UID[3];
+
+
+
     if((DataBuffer[2]-g_PN532_NFC_UID[2])==0x51 || (DataBuffer[2]-g_PN532_NFC_UID[2])==0x54)
     {
         //金额清零
-        for(index=4;index<12;index++)
+
+        //金额二次加密
+        for(index=8;index<12;index++)
         {
-            DataBuffer[index]=(uint8_t)0;//清零
+            DataBuffer[index]=(uint8_t)(Money>>((index%4)*8))+StationID[index%4];//加密
+        }
+        //金额一次加密
+        for(index=4;index<8;index++)
+        {
+            DataBuffer[index]=(uint8_t)(Money>>((index%4)*8))+g_PN532_NFC_UID[index%4];//加密
         }
 
         if(nfc_write16byte(1,DataBuffer))
@@ -837,19 +854,10 @@ float NfcPn532Api::nfc_ReadCard_offline()
 
     if((DataBuffer[2]-g_PN532_NFC_UID[2])==0x51 || (DataBuffer[2]-g_PN532_NFC_UID[2])==0x54)
     {
-        //判断金额是否相符
-        if(((uint8_t)(DataBuffer[8]-(DataBuffer[12]-g_PN532_NFC_UID[0]))!=(uint8_t)(DataBuffer[4]-g_PN532_NFC_UID[0])) ||
-             ((uint8_t)(DataBuffer[9]-(DataBuffer[13]-g_PN532_NFC_UID[1]))!=(uint8_t)(DataBuffer[5]-g_PN532_NFC_UID[1])) ||
-           ((uint8_t)(DataBuffer[10]-(DataBuffer[14]-g_PN532_NFC_UID[2]))!=(uint8_t)(DataBuffer[6]-g_PN532_NFC_UID[2]))||
-           ((uint8_t)(DataBuffer[11]-(DataBuffer[15]-g_PN532_NFC_UID[3]))!=(uint8_t)(DataBuffer[7]-g_PN532_NFC_UID[3])))
-        {
-            qDebug() << "card money  defferent error!";
-            return -1;
-        }
 
-        //判断余额是否充足
         int balance=((uint8_t)(DataBuffer[4]-g_PN532_NFC_UID[0])>>0) |((uint8_t)(DataBuffer[5]-g_PN532_NFC_UID[1])<<8) | ((uint8_t)(DataBuffer[6]-g_PN532_NFC_UID[2])<<16) | ((uint8_t)(DataBuffer[7]-g_PN532_NFC_UID[3])<<24) ;
-        return balance*1.0/100 ;
+        qDebug() << "Leave nfc_ReadCard_offline" << balance;
+        return float(balance*1.0/100) ;
     }
     else
     {
@@ -857,7 +865,81 @@ float NfcPn532Api::nfc_ReadCard_offline()
         return -1;
     }
 
-    qDebug() << "Leave nfc_ReadCard_offline";
+}
+
+int NfcPn532Api::nfc_RechargeCard_offline(uint8_t *pStationID, char *pOutRfidNumbers, int money)
+{
+    qDebug() << "Enter nfc_RechargeCard_offline";
+
+    uint8_t DataBuffer[17];
+    uint8_t index=0;
+    uint8_t StationID[4];
+
+    if(nfc_WakeUp())
+    {
+        qDebug() << "nfc_WakeUp error!";
+        return -1;
+    }
+    if(nfc_InListPassiveTarget())
+    {
+        qDebug() << "nfc_InListPassiveTarget error!";
+        return -1;
+    }
+    if(nfc_PsdVerifyKeyA((uint8_t*)g_PN532_KeyA))//g_PN532_KeyA_Default
+    {
+        qDebug() << "nfc_PsdVerifyKeyA error!";
+        return -1;
+    }
+
+    //数据清零
+    memset(DataBuffer,0,17);
+    memset(StationID,0,4);
+
+    if(nfc_read16byte(1,DataBuffer))
+    {
+        qDebug() << "nfc_read16byte error!";
+        return -1;
+    }
+
+    StationID[0] = DataBuffer[12] - g_PN532_NFC_UID[0];
+    StationID[1] = DataBuffer[13] - g_PN532_NFC_UID[1];
+    StationID[2] = DataBuffer[14] - g_PN532_NFC_UID[2];
+    StationID[3] = DataBuffer[15] - g_PN532_NFC_UID[3];
+
+    int totals_money = 0;
+
+    if((DataBuffer[2]-g_PN532_NFC_UID[2])==0x51 || (DataBuffer[2]-g_PN532_NFC_UID[2])==0x54)
+    {
+        int balance=((uint8_t)(DataBuffer[4]-g_PN532_NFC_UID[0])>>0) |((uint8_t)(DataBuffer[5]-g_PN532_NFC_UID[1])<<8) | ((uint8_t)(DataBuffer[6]-g_PN532_NFC_UID[2])<<16) | ((uint8_t)(DataBuffer[7]-g_PN532_NFC_UID[3])<<24) ;
+        totals_money = balance + money * 100;
+        //金额二次加密
+        for(index=8;index<12;index++)
+        {
+            DataBuffer[index]=(uint8_t)(totals_money>>((index%4)*8))+StationID[index%4];//加密
+        }
+        //金额一次加密
+        for(index=4;index<8;index++)
+        {
+            DataBuffer[index]=(uint8_t)(totals_money>>((index%4)*8))+g_PN532_NFC_UID[index%4];//加密
+        }
+
+        if(nfc_write16byte(1,DataBuffer))
+            return -1;
+
+        pStationID[0] = StationID[0];
+        pStationID[1] = StationID[1];
+        pStationID[2] = StationID[2];
+        pStationID[3] = StationID[3];
+        qDebug() << "nfc:" << StationID;
+        snprintf(pOutRfidNumbers,17,"%02x%02x%02x%02x%02x%02x%02x%02x",g_PN532_NFC_UID[0],g_PN532_NFC_UID[1],g_PN532_NFC_UID[2],g_PN532_NFC_UID[3],StationID[0],StationID[1],StationID[2],StationID[3]);
+        qDebug() << "Leave nfc_RechargeCard_offline" << balance;
+
+    }
+    else
+    {
+        qDebug() << "card type error!";
+        return -1;
+    }
     return 0;
 }
 

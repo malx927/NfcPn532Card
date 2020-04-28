@@ -86,6 +86,9 @@ void CorpOfflineWidget::setBtnEnable(bool flag)
 {
     ui->offlineButton->setEnabled(flag);
     ui->clearMoneyButton->setEnabled(flag);
+
+    ui->pushButton->setEnabled(flag);
+    ui->readButton->setEnabled(flag);
 }
 
 void CorpOfflineWidget::on_offlineButton_clicked()
@@ -102,10 +105,23 @@ void CorpOfflineWidget::on_offlineButton_clicked()
 
 void CorpOfflineWidget::on_clearMoneyButton_clicked()
 {
-
+    emit sig_corp_offline_clear(m_card_type);
 }
 
 void CorpOfflineWidget::on_pushButton_clicked()
 {
+    int money = ui->spinBoxMoney->value();
+    if(money == 0)
+    {
+        QMessageBox::warning(this, "提示:", "离线卡金额");
+        ui->spinBoxMoney->setFocus();
+        return;
+    }
+    emit sig_corp_offline_recharge(m_card_type, money);
+}
 
+
+void CorpOfflineWidget::on_readButton_clicked()
+{
+    emit sig_corp_offline_read(m_card_type);
 }

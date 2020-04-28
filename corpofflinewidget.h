@@ -25,6 +25,9 @@ private:
 
 signals:
     void sig_corp_offline_write(QString cType, int value);
+    void sig_corp_offline_read(QString cType);
+    void sig_corp_offline_clear(QString cType);
+    void sig_corp_offline_recharge(QString cType, int money);
 
 public slots:
     void setBtnEnable(bool flag);
@@ -35,6 +38,8 @@ private slots:
     void on_clearMoneyButton_clicked();
 
     void on_pushButton_clicked();
+
+    void on_readButton_clicked();
 
 private:
     Ui::CorpOfflineWidget *ui;
