@@ -38,6 +38,11 @@ public:
     QPushButton *clearMoneyButton;
     QSpacerItem *horizontalSpacer;
     QTableView *stOfflineTableView;
+    QHBoxLayout *horizontalLayout_2;
+    QSpacerItem *horizontalSpacer_2;
+    QLabel *label_5;
+    QLabel *label_money;
+    QLabel *label_6;
 
     void setupUi(QWidget *StationOfflineWidget)
     {
@@ -102,6 +107,33 @@ public:
 
         verticalLayout->addWidget(stOfflineTableView);
 
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_2->addItem(horizontalSpacer_2);
+
+        label_5 = new QLabel(StationOfflineWidget);
+        label_5->setObjectName(QString::fromUtf8("label_5"));
+
+        horizontalLayout_2->addWidget(label_5);
+
+        label_money = new QLabel(StationOfflineWidget);
+        label_money->setObjectName(QString::fromUtf8("label_money"));
+        label_money->setMinimumSize(QSize(50, 0));
+        label_money->setStyleSheet(QString::fromUtf8("color:rgb(0, 0, 255)"));
+        label_money->setAlignment(Qt::AlignCenter);
+
+        horizontalLayout_2->addWidget(label_money);
+
+        label_6 = new QLabel(StationOfflineWidget);
+        label_6->setObjectName(QString::fromUtf8("label_6"));
+
+        horizontalLayout_2->addWidget(label_6);
+
+
+        verticalLayout->addLayout(horizontalLayout_2);
+
 
         retranslateUi(StationOfflineWidget);
 
@@ -117,6 +149,9 @@ public:
         label_4->setText(QApplication::translate("StationOfflineWidget", "\345\205\203", nullptr));
         stOfflineButton->setText(QApplication::translate("StationOfflineWidget", "\345\206\231\347\253\231\345\234\272\347\246\273\347\272\277\345\215\241", nullptr));
         clearMoneyButton->setText(QApplication::translate("StationOfflineWidget", "\346\270\205\347\251\272\351\207\221\351\242\235", nullptr));
+        label_5->setText(QApplication::translate("StationOfflineWidget", "\351\207\221\351\242\235\345\220\210\350\256\241:", nullptr));
+        label_money->setText(QString());
+        label_6->setText(QApplication::translate("StationOfflineWidget", "\345\205\203", nullptr));
     } // retranslateUi
 
 };

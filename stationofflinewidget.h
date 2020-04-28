@@ -16,6 +16,7 @@ public:
     explicit StationOfflineWidget(QWidget *parent = nullptr);
     ~StationOfflineWidget();
     QSqlTableModel* getModel();
+    void getTotals();
 private:
     void createModel();
     void createView();
@@ -30,6 +31,8 @@ private slots:
     void on_stOfflineButton_clicked();
 
     void on_clearMoneyButton_clicked();
+
+    void on_pushButton_2_clicked();
 
 private:
     Ui::StationOfflineWidget *ui;

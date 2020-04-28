@@ -36,6 +36,8 @@ public:
     int nfc_CreateCard_Network(uint8_t *pStationID,char *pOutRfidNumbers);//网络-后台卡
     int nfc_CreateCard_Offline(uint8_t *pStationID,char *pOutRfidNumbers,uint32_t Money);//离线-计量卡
     int nfc_CreateCard_SelfUsed(char *DeviceSN);//单桩-绑定卡
+    int nfc_ClearCard_offline();
+    float nfc_ReadCard_offline();
 
     QByteArray readData();
 

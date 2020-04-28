@@ -2,6 +2,7 @@
 #include "ui_corpofflinewidget.h"
 #include <QMessageBox>
 #include <QSqlTableModel>
+#include <QSqlQuery>
 #include <QDebug>
 
 CorpOfflineWidget::CorpOfflineWidget(QWidget *parent) :
@@ -13,7 +14,7 @@ CorpOfflineWidget::CorpOfflineWidget(QWidget *parent) :
 
     createModel();
     createView();
-
+    getTotals();
 }
 
 CorpOfflineWidget::~CorpOfflineWidget()
@@ -24,6 +25,20 @@ CorpOfflineWidget::~CorpOfflineWidget()
 QSqlTableModel *CorpOfflineWidget::getModel()
 {
     return tableModel;
+}
+
+void CorpOfflineWidget::getTotals()
+{
+    QString sql = QString("select sum(money) from cards where type_id='%1'").arg(m_card_type);
+    QSqlQuery query;
+    qDebug() << "totals" << sql;
+    query.exec(sql);
+    int totals = 0;
+    if(query.next()){
+        totals = query.value(0).toInt();
+    }
+    qDebug() << "totals" << totals;
+    ui->label_money->setText(QString::number(totals));
 }
 
 void CorpOfflineWidget::createModel()
@@ -86,6 +101,11 @@ void CorpOfflineWidget::on_offlineButton_clicked()
 }
 
 void CorpOfflineWidget::on_clearMoneyButton_clicked()
+{
+
+}
+
+void CorpOfflineWidget::on_pushButton_clicked()
 {
 
 }

@@ -752,6 +752,115 @@ int NfcPn532Api::nfc_CreateCard_SelfUsed(char *DeviceSN)
     return 0;
 }
 
+int NfcPn532Api::nfc_ClearCard_offline()
+{
+    qDebug() << "Enter nfc_ClearCard_offline";
+    uint8_t index=0;
+    uint8_t DataBuffer[17];
+
+    if(nfc_WakeUp())
+    {
+        qDebug() << "nfc_WakeUp error!";
+        return -1;
+    }
+    if(nfc_InListPassiveTarget())
+    {
+        qDebug() << "nfc_InListPassiveTarget error!";
+        return -1;
+    }
+    if(nfc_PsdVerifyKeyA((uint8_t*)g_PN532_KeyA))//g_PN532_KeyA_Default
+    {
+        qDebug() << "nfc_PsdVerifyKeyA error!";
+        return -1;
+    }
+
+    //数据清零
+    memset(DataBuffer,0,17);
+
+    if(nfc_read16byte(1,DataBuffer))
+    {
+        qDebug() << "nfc_read16byte error!";
+        return -1;
+    }
+
+    if((DataBuffer[2]-g_PN532_NFC_UID[2])==0x51 || (DataBuffer[2]-g_PN532_NFC_UID[2])==0x54)
+    {
+        //金额清零
+        for(index=4;index<12;index++)
+        {
+            DataBuffer[index]=(uint8_t)0;//清零
+        }
+
+        if(nfc_write16byte(1,DataBuffer))
+            return -1;
+    }
+    else
+    {
+        qDebug() << "card type error!";
+        return -1;
+    }
+
+    qDebug() << "Leave nfc_ClearCard_offline";
+    return 0;
+}
+
+float NfcPn532Api::nfc_ReadCard_offline()
+{
+    qDebug() << "Enter nfc_ReadCard_offline";
+
+    uint8_t DataBuffer[17];
+
+    if(nfc_WakeUp())
+    {
+        qDebug() << "nfc_WakeUp error!";
+        return -1;
+    }
+    if(nfc_InListPassiveTarget())
+    {
+        qDebug() << "nfc_InListPassiveTarget error!";
+        return -1;
+    }
+    if(nfc_PsdVerifyKeyA((uint8_t*)g_PN532_KeyA))//g_PN532_KeyA_Default
+    {
+        qDebug() << "nfc_PsdVerifyKeyA error!";
+        return -1;
+    }
+
+    //数据清零
+    memset(DataBuffer,0,17);
+
+    if(nfc_read16byte(1,DataBuffer))
+    {
+        qDebug() << "nfc_read16byte error!";
+        return -1;
+    }
+
+    if((DataBuffer[2]-g_PN532_NFC_UID[2])==0x51 || (DataBuffer[2]-g_PN532_NFC_UID[2])==0x54)
+    {
+        //判断金额是否相符
+        if(((uint8_t)(DataBuffer[8]-(DataBuffer[12]-g_PN532_NFC_UID[0]))!=(uint8_t)(DataBuffer[4]-g_PN532_NFC_UID[0])) ||
+             ((uint8_t)(DataBuffer[9]-(DataBuffer[13]-g_PN532_NFC_UID[1]))!=(uint8_t)(DataBuffer[5]-g_PN532_NFC_UID[1])) ||
+           ((uint8_t)(DataBuffer[10]-(DataBuffer[14]-g_PN532_NFC_UID[2]))!=(uint8_t)(DataBuffer[6]-g_PN532_NFC_UID[2]))||
+           ((uint8_t)(DataBuffer[11]-(DataBuffer[15]-g_PN532_NFC_UID[3]))!=(uint8_t)(DataBuffer[7]-g_PN532_NFC_UID[3])))
+        {
+            qDebug() << "card money  defferent error!";
+            return -1;
+        }
+
+        //判断余额是否充足
+        int balance=((uint8_t)(DataBuffer[4]-g_PN532_NFC_UID[0])>>0) |((uint8_t)(DataBuffer[5]-g_PN532_NFC_UID[1])<<8) | ((uint8_t)(DataBuffer[6]-g_PN532_NFC_UID[2])<<16) | ((uint8_t)(DataBuffer[7]-g_PN532_NFC_UID[3])<<24) ;
+        return balance*1.0/100 ;
+    }
+    else
+    {
+        qDebug() << "card type error!";
+        return -1;
+    }
+
+    qDebug() << "Leave nfc_ReadCard_offline";
+    return 0;
+}
+
 QByteArray NfcPn532Api::readData()
 {
     QByteArray responseData;

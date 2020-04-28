@@ -2,6 +2,7 @@
 #include "ui_stationofflinewidget.h"
 #include <QMessageBox>
 #include <QSqlTableModel>
+#include <QSqlQuery>
 #include <QDebug>
 
 StationOfflineWidget::StationOfflineWidget(QWidget *parent) :
@@ -14,6 +15,7 @@ StationOfflineWidget::StationOfflineWidget(QWidget *parent) :
 
     createModel();
     createView();
+    getTotals();
 
 }
 
@@ -25,6 +27,20 @@ StationOfflineWidget::~StationOfflineWidget()
 QSqlTableModel *StationOfflineWidget::getModel()
 {
     return tableModel;
+}
+
+void StationOfflineWidget::getTotals()
+{
+    QString sql = QString("select sum(money) from cards where type_id='%1'").arg(m_card_type);
+    QSqlQuery query;
+    qDebug() << "totals" << sql;
+    query.exec(sql);
+    int totals = 0;
+    if(query.next()){
+        totals = query.value(0).toInt();
+    }
+    qDebug() << "totals" << totals;
+    ui->label_money->setText(QString::number(totals));
 }
 
 void StationOfflineWidget::createModel()
@@ -94,6 +110,11 @@ void StationOfflineWidget::on_stOfflineButton_clicked()
 }
 
 void StationOfflineWidget::on_clearMoneyButton_clicked()
+{
+
+}
+
+void StationOfflineWidget::on_pushButton_2_clicked()
 {
 
 }

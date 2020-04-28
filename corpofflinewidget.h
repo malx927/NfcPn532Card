@@ -17,6 +17,7 @@ public:
     ~CorpOfflineWidget();
 
     QSqlTableModel* getModel();
+    void getTotals();
 
 private:
     void createModel();
@@ -32,6 +33,8 @@ private slots:
     void on_offlineButton_clicked();
 
     void on_clearMoneyButton_clicked();
+
+    void on_pushButton_clicked();
 
 private:
     Ui::CorpOfflineWidget *ui;
