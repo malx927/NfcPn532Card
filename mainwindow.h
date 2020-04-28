@@ -31,6 +31,7 @@ private:
     void addWidget();
     void createSqliteDb();
     void setButtionState(bool flag);
+    void insertData(QString type, QString type_name, QDate dTime, QString card=QString(""), QString stationid=QString(""), int money=0, QString device_sn=QString());
 public slots:
     void openComm();
     void slot_start_stop();

@@ -9,16 +9,20 @@ StartStopWidget::StartStopWidget(QWidget *parent) :
     ui(new Ui::StartStopWidget)
 {
     ui->setupUi(this);
-    createModel();
-    createView();
     m_card_type = "5a";
     ui->dateEditStopDate->setDate(QDate::currentDate());
-
+    createModel();
+    createView();
 }
 
 StartStopWidget::~StartStopWidget()
 {
     delete ui;
+}
+
+QSqlTableModel *StartStopWidget::getModel()
+{
+    return tableModel;
 }
 
 void StartStopWidget::createModel()
@@ -27,22 +31,29 @@ void StartStopWidget::createModel()
     tableModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
     tableModel->setTable("cards");
     tableModel->select();
-    qDebug() << tableModel->rowCount();
-//    tableModel->removeColumn(0);
+    QString strWhere = QString("type_id='%1'").arg(m_card_type);
+    tableModel->setFilter(strWhere);
+    tableModel->setSort(tableModel->fieldIndex("create_time"), Qt::DescendingOrder);
+//    qDebug() << tableModel->rowCount();
+    tableModel->removeColumn(tableModel->fieldIndex("card_num"));
+    tableModel->removeColumn(tableModel->fieldIndex("station"));
+    tableModel->removeColumn(tableModel->fieldIndex("money"));
+    tableModel->removeColumn(tableModel->fieldIndex("device"));
+    tableModel->removeColumn(tableModel->fieldIndex("type_id"));
 
-    tableModel->setHeaderData(0, Qt::Horizontal, "ID");
-    tableModel->setHeaderData(1, Qt::Horizontal, QStringLiteral("卡号"));
-    tableModel->setHeaderData(2, Qt::Horizontal, QStringLiteral("类型编号"));
-    tableModel->setHeaderData(3, Qt::Horizontal, QStringLiteral("类型名称"));
-    tableModel->setHeaderData(4, Qt::Horizontal, QStringLiteral("创建时间"));
-    tableModel->setHeaderData(5, Qt::Horizontal, QStringLiteral("充电站ID"));
-    tableModel->setHeaderData(6, Qt::Horizontal, QStringLiteral("金额"));
+    tableModel->setHeaderData(tableModel->fieldIndex("id"), Qt::Horizontal, "ID");
+    tableModel->setHeaderData(tableModel->fieldIndex("type_id"), Qt::Horizontal, QStringLiteral("类型编码"));
+    tableModel->setHeaderData(tableModel->fieldIndex("card_type"), Qt::Horizontal, QStringLiteral("类型名称"));
+    tableModel->setHeaderData(tableModel->fieldIndex("end_date"), Qt::Horizontal, QStringLiteral("有效截止时间"));
+    tableModel->setHeaderData(tableModel->fieldIndex("username"), Qt::Horizontal, QStringLiteral("操作人"));
+    tableModel->setHeaderData(tableModel->fieldIndex("create_time"), Qt::Horizontal, QStringLiteral("创建时间"));
+
 }
 
 void StartStopWidget::createView()
 {
     ui->startTableView->setSortingEnabled(true);
-    ui->startTableView->horizontalHeader()->setStyleSheet("QHeaderView::section{background:lightgray;}");
+//    ui->startTableView->horizontalHeader()->setStyleSheet("QHeaderView::section{background:lightgray;}");
     ui->startTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->startTableView->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->startTableView->setShowGrid(true);
@@ -52,12 +63,7 @@ void StartStopWidget::createView()
     ui->startTableView->setModel( tableModel );
     ui->startTableView->hideColumn(0);
     ui->startTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-//    ui->startTableView->resizeColumnToContents(1);
-//    ui->startTableView->resizeColumnToContents(2);
-//    ui->startTableView->resizeColumnToContents(4);
 
-
-//    ui->startTableView->sortByColumn(3, Qt::DescendingOrder);
 
 }
 

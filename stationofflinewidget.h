@@ -15,6 +15,10 @@ class StationOfflineWidget : public QWidget
 public:
     explicit StationOfflineWidget(QWidget *parent = nullptr);
     ~StationOfflineWidget();
+    QSqlTableModel* getModel();
+private:
+    void createModel();
+    void createView();
 
 signals:
     void sig_station_offline_write(QString cType, QString stationId, int nMoney);

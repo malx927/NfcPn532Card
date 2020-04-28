@@ -16,6 +16,12 @@ public:
     explicit CorpOfflineWidget(QWidget *parent = nullptr);
     ~CorpOfflineWidget();
 
+    QSqlTableModel* getModel();
+
+private:
+    void createModel();
+    void createView();
+
 signals:
     void sig_corp_offline_write(QString cType, int value);
 

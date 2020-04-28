@@ -6,9 +6,21 @@ CorpManageWidget::CorpManageWidget(QWidget *parent) :
     ui(new Ui::CorpManageWidget)
 {
     ui->setupUi(this);
+    createModel();
+    createView();
 }
 
 CorpManageWidget::~CorpManageWidget()
 {
     delete ui;
+}
+
+void CorpManageWidget::createModel()
+{
+
+}
+
+void CorpManageWidget::createView()
+{
+
 }

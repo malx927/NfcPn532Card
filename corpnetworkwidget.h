@@ -14,6 +14,10 @@ class CorpNetworkWidget : public QWidget
 public:
     explicit CorpNetworkWidget(QWidget *parent = nullptr);
     ~CorpNetworkWidget();
+    QSqlTableModel* getModel();
+private:
+    void createModel();
+    void createView();
 
 signals:
     void sig_corp_network_write(QString cType);

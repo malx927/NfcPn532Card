@@ -15,6 +15,10 @@ class StationNetworkWidget : public QWidget
 public:
     explicit StationNetworkWidget(QWidget *parent = nullptr);
     ~StationNetworkWidget();
+    QSqlTableModel* getModel();
+private:
+    void createModel();
+    void createView();
 
 signals:
     void sig_station_network_write(QString cType, QString stationId);

@@ -16,6 +16,7 @@ class StartStopWidget : public QWidget
 public:
     explicit StartStopWidget(QWidget *parent = nullptr);
     ~StartStopWidget();
+    QSqlTableModel* getModel();
 
 signals:
     void sig_start_stop_write(QString cType, QDate date);

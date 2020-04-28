@@ -17,6 +17,10 @@ public:
     ~CorpManageWidget();
 
 private:
+    void createModel();
+    void createView();
+
+private:
     Ui::CorpManageWidget *ui;
     QString m_card_type;
     QSqlTableModel* tableModel;

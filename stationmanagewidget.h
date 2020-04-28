@@ -16,6 +16,10 @@ class StationManageWidget : public QWidget
 public:
     explicit StationManageWidget(QWidget *parent = nullptr);
     ~StationManageWidget();
+    QSqlTableModel* getModel();
+private:
+    void createModel();
+    void createView();
 
 signals:
     void sig_station_manage_write(QString cType, QString stationId, QDate date);

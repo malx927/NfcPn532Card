@@ -15,6 +15,10 @@ class StationSingleWidget : public QWidget
 public:
     explicit StationSingleWidget(QWidget *parent = nullptr);
     ~StationSingleWidget();
+    QSqlTableModel* getModel();
+private:
+    void createModel();
+    void createView();
 
 signals:
     void sig_station_single_write(QString cType, QString deviceSN);
