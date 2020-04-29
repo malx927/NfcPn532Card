@@ -8,6 +8,8 @@ QT       += core gui serialport network sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+include($${PWD}/excel/excel.pri)
+
 TARGET = NfcPn532Card
 TEMPLATE = app
 

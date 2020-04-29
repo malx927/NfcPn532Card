@@ -1,3 +1,4 @@
+debug/qexcel.o
 debug/corpmanagewidget.o
 debug/corpnetworkwidget.o
 debug/corpofflinewidget.o
@@ -11,6 +12,7 @@ debug/stationnetworkwidget.o
 debug/stationofflinewidget.o
 debug/stationsinglewidget.o
 debug/qrc_res.o
+debug/moc_qexcel.o
 debug/moc_corpmanagewidget.o
 debug/moc_corpnetworkwidget.o
 debug/moc_corpofflinewidget.o

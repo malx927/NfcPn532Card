@@ -1,3 +1,4 @@
+release/qexcel.o
 release/corpmanagewidget.o
 release/corpnetworkwidget.o
 release/corpofflinewidget.o
@@ -11,6 +12,7 @@ release/stationnetworkwidget.o
 release/stationofflinewidget.o
 release/stationsinglewidget.o
 release/qrc_res.o
+release/moc_qexcel.o
 release/moc_corpmanagewidget.o
 release/moc_corpnetworkwidget.o
 release/moc_corpofflinewidget.o
