@@ -2,6 +2,7 @@
 
 #include <QDateTime>
 #include <QDebug>
+#include <QByteArray>
 
 uint8_t g_PN532_NFC_UID[4]; //存储 UID
 uint8_t g_PN532_SequenceLength=0;//卡的序列号长度
@@ -601,7 +602,8 @@ int NfcPn532Api::nfc_CreateCard_Offline(uint8_t *pStationID,char *pOutRfidNumber
     qDebug() << "Enter nfc_CreateCard_Offline";
     uint8_t index=0;
     uint8_t DataBuffer[16];
-
+//    qDebug() << pStationID[0] << pStationID[1] << pStationID[2] << pStationID[3];
+//    snprintf(pOutRfidNumbers,17,"%02x%02x%02x%02x%02x%02x%02x%02x",g_PN532_NFC_UID[0],g_PN532_NFC_UID[1],g_PN532_NFC_UID[2],g_PN532_NFC_UID[3],pStationID[0],pStationID[1],pStationID[2],pStationID[3]);
     if(nfc_WakeUp())
     {
         qDebug() << "nfc_WakeUp error!";

@@ -422,8 +422,11 @@ void MainWindow::slot_station_network_write(QString cType, QString stationId)
 
         bool ok;
         uint u_station_id = strStationID.toUInt(&ok);
-        QByteArray arrStationID = intToByte4(u_station_id);
-        strcpy((char*)StationID, arrStationID.data());
+
+        StationID[0] = u_station_id >> 24 & 0xff;
+        StationID[1] = u_station_id >> 16 & 0xff;
+        StationID[2] = u_station_id >> 8 & 0xff;
+        StationID[3] = u_station_id >> 0 & 0xff;
 
         int ret = pn532Api->nfc_CreateCard_Network(StationID, OutRfidNumbers);
         qDebug() << QString(OutRfidNumbers);
@@ -454,12 +457,14 @@ void MainWindow::slot_station_offline_write(QString cType, QString stationId, in
         QString strStationID = stationId;
 
         bool ok;
-        uint u_station_id = strStationID.toUInt(&ok);
+        uint32_t u_station_id = strStationID.toUInt(&ok);
         qDebug() << "slot_station_offline_write::" << u_station_id;
-        QByteArray arrStationID = intToByte4(u_station_id);
+        StationID[0] = u_station_id >> 24 & 0xff;
+        StationID[1] = u_station_id >> 16 & 0xff;
+        StationID[2] = u_station_id >> 8 & 0xff;
+        StationID[3] = u_station_id >> 0 & 0xff;
 
-        strcpy((char*)StationID, arrStationID.data());
-        qDebug() << "slot_station_offline_write::" << u_station_id << arrStationID << StationID;
+        qDebug() << "slot_station_offline_write::" << u_station_id << StationID;
 
         int money = nMoney * 100;
 
@@ -540,6 +545,7 @@ void MainWindow::slot_card_recharge_money(QString cType, int money)
         memset(OutRfidNumbers, 0, 64);
 
         int ret = pn532Api->nfc_RechargeCard_offline(StationID, OutRfidNumbers, money);
+
         if(ret >= 0)
         {
             auto cur_time = QDate::currentDate();
@@ -554,8 +560,8 @@ void MainWindow::slot_card_recharge_money(QString cType, int money)
                 card_type = "场站离线卡";
             }
 
-//            int32_t intStation = (StationID[0] << 24&0xff000000) | (StationID[1] << 16&0x00ff0000) | (StationID[2] << 8&0x0000ff00) | (StationID[3]&0x000000ff);
-            int32_t intStation = ((uint8_t)(StationID[0])>>0) |((uint8_t)(StationID[1])<<8) | ((uint8_t)(StationID[2])<<16) | ((uint8_t)(StationID[3])<<24) ;
+            int intStation = (StationID[0] << 24) | (StationID[1] << 16 ) | (StationID[2] << 8) | StationID[3];
+
             qDebug() << "intStation" << intStation;
             insertData(cType, card_type, cur_time, QString(OutRfidNumbers), QString::number(intStation), money);
             QMessageBox::information(this, "充值提示:", "充值成功");
